@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDAO {
-    pubilc List <Message> getAllMessages(){
+    // pubilc List <Message> getAllMessages(){
 
-    }
+    // }
 
-    public
 }

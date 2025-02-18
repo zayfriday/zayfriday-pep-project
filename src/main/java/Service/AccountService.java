@@ -1,10 +1,10 @@
 package Service;
 
-import Util.ConnectionUtil;
-import DAO.AccountDAO;
 import Model.Account;
+import DAO.AccountDAO;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class AccountService {
     private AccountDAO accountDAO;
