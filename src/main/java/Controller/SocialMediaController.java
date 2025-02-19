@@ -5,6 +5,8 @@ import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
 
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
@@ -16,12 +18,8 @@ import io.javalin.http.Context;
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
-    AccountService accountService;
-    MessageService messageService;
-
-    public SocialMediaController(){
-        this.accountService = new AccountService();
-    }
+    AccountService accountService = new AccountService();
+    MessageService messageService = new MessageService();
 
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -30,7 +28,6 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-
         //endpoints
         app.post("/register", this::registrationHandler);
         app.post("/login", this::loginHandler);
@@ -40,7 +37,6 @@ public class SocialMediaController {
         app.delete("/messages/{message_id}", this::deleteMessageByIdHandler);
         app.patch("/messages/{message_id}", this::updateMessageByIdHandler);
         app.get("/accounts/{account_id}/messages", this::getAllMessagesPostedByUserHandler);
-
         return app;
     }
 
@@ -59,7 +55,7 @@ public class SocialMediaController {
         }
     }
 
-    /* User Login with username and password (no account_id)  upon POST req */
+    /* User Login with username and password (no account_id) upon POST req */
     private void loginHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper om = new ObjectMapper();
         Account account = om.readValue(ctx.body(), Account.class);
@@ -74,7 +70,8 @@ public class SocialMediaController {
 
     /* Returns all messages upon GET request */
     private void getAllMessagesHandler(Context ctx) throws JsonProcessingException {
-        ctx.json(messageService.getAllMessages());
+        List <Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
 
     }
 
@@ -87,9 +84,10 @@ public class SocialMediaController {
 
     /* Gets message by message_id upon GET req. Response body contains message if present */
     private void getMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        MessageService ms = new MessageService();
         ObjectMapper om = new ObjectMapper();
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
-        Message message = messageService.getMessageById(message_id);
+        Message message = ms.getMessageById(message_id);
         ctx.json(om.writeValueAsString(message));
     }
 

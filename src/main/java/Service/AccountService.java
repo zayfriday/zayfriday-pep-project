@@ -37,13 +37,9 @@ public class AccountService {
 
     /* Method to Login. Only if username and password match */
     public Account accountLogin(Account account){
-        if (this.accountDAO.getAccountByUsername(account.getUsername()) != null){
-            if (this.accountDAO.getAccountPasswordByUsername(account.getUsername()) == account.getPassword()){
-                return this.accountDAO.getAccountByUsername(account.getUsername());
-            } 
-            return null;
+        if (this.accountDAO.isUserValid(account) && this.accountDAO.isUserCredentialsValid(account)){
+            return this.accountDAO.getAccountByUsername(account.getUsername());
         }
         return null;
     }
-
 }
