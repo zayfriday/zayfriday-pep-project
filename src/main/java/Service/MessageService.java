@@ -47,17 +47,17 @@ public class MessageService {
 
     /* Deletes message (if present) and returns the message that was deleted */
     public Message deleteMessageById(int id){ 
-        Message m = new Message();
-        m = this.messageDAO.getMessageById(id);
+        Message m = this.messageDAO.getMessageById(id);
         boolean didDelete = this.messageDAO.deleteMessageById(id);   
-        if (didDelete){
+        if (didDelete && !(m == null)){
             return m;
         }
         return null;
     }
 
     /* Updates message (if present) and returns the message that was deleted */
-    public Message updateMessageById(int id, String new_text){ 
+    public Message updateMessageById(int id, Message message){ 
+        String new_text = message.getMessage_text();
         if (this.messageDAO.getMessageById(id) == null){
             return null;
         }
