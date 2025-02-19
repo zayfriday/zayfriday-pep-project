@@ -31,7 +31,14 @@ public class SocialMediaController {
         Javalin app = Javalin.create().start(8080);
 
         //endpoints
-        app.post("register", this::registrationHandler);
+        app.post("/register", this::registrationHandler);
+        app.post("/login", this::loginHandler);
+        app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
+        app.get("/messages/{message_id}", this::getMessageByIdHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageByIdHandler);
+        app.patch("/messages/{message_id}", this::updateMessageByIdHandler);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesPostedByUserHandler);
 
         return app;
     }
@@ -49,6 +56,49 @@ public class SocialMediaController {
         else {
             ctx.json(om.writeValueAsString(newAccount));
         }
+    }
+
+    /* User Login with username and password (no account_id) */
+    private void loginHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+        Account account = om.readValue(ctx.body(), Account.class);
+        Account loggedInAccount = accountService.accountLogin(account);
+        if (loggedInAccount == null){
+            ctx.status(401);
+        }
+        else {
+            ctx.json(om.writeValueAsString(loggedInAccount));
+        }
+    }
+
+    /*  */
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+    }
+
+    /*  */
+    private void getAllMessagesHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+    }
+
+    /*  */
+    private void getMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+    }
+
+    /*  */
+    private void deleteMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+    }
+
+    /*  */
+    private void updateMessageByIdHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
+    }
+
+    /*  */
+    private void getAllMessagesPostedByUserHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper om = new ObjectMapper();
     }
 
 

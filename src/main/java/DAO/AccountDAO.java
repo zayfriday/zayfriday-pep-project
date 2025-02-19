@@ -73,6 +73,26 @@ public class AccountDAO {
         return null;
     }
 
+    public String getAccountPasswordByUsername(String username){
+        Connection connection = ConnectionUtil.getConnection();
+        try {
+            String sql = "select password from account where username = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                String password = rs.getString("password");
+                return password;
+            }
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;   
+    }
+
     /* Adds an account with an auto generated account_id */
     public Account addAccount(Account account){
         Connection connection = ConnectionUtil.getConnection();

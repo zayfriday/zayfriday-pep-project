@@ -19,7 +19,9 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
-    /* Method to register account (add to accountDAO) according to specific requirements */
+    /* Method to register account (add to accountDAO). Before adding checks that:
+     *  username isn't empty, username isn't already used, and password is 4+ characters
+     */
     public Account accountRegistration(Account account){
         if (account.getUsername().isEmpty()) {
             return null;
@@ -33,8 +35,15 @@ public class AccountService {
         }
     }
 
-    // public Account accountLogin(Account account){
-
-    // }
+    /* Method to Login. Only if username and password match */
+    public Account accountLogin(Account account){
+        if (this.accountDAO.getAccountByUsername(account.getUsername()) != null){
+            if (this.accountDAO.getAccountPasswordByUsername(account.getUsername()) == account.getPassword()){
+                return this.accountDAO.getAccountByUsername(account.getUsername());
+            } 
+            return null;
+        }
+        return null;
+    }
 
 }
