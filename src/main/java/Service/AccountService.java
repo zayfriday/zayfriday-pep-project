@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class AccountService {
-    private AccountDAO accountDAO;
+    AccountDAO accountDAO;
 
     /* No args constructor */
     public AccountService(){
@@ -25,7 +25,7 @@ public class AccountService {
     public Account accountRegistration(Account account){
         if (account.getUsername().isEmpty()) {
             return null;
-        } else if (this.accountDAO.getAccountByUsername(account.getUsername()) != null){
+        } else if (this.accountDAO.getAccountByUsername(account) != null){
             return null;
         } else if (account.getPassword().length() < 4){
             return null;
@@ -37,9 +37,11 @@ public class AccountService {
 
     /* Method to Login. Only if username and password match */
     public Account accountLogin(Account account){
-        if (this.accountDAO.isUserValid(account) && this.accountDAO.isUserCredentialsValid(account)){
-            return this.accountDAO.getAccountByUsername(account.getUsername());
+        if (this.accountDAO.getAccountByCredentials(account) == null){
+            return null;
         }
-        return null;
+        else {
+            return this.accountDAO.getAccountByCredentials(account);
+        }
     }
 }
