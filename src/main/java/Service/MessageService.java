@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class MessageService {
     MessageDAO messageDAO;
-
     AccountDAO accountDAO = new AccountDAO();
 
     public MessageService(){
@@ -30,10 +29,11 @@ public class MessageService {
 
     public Message getMessageById(int id){
         if (this.messageDAO.getMessageById(id) == null){
-            Message m = new Message();
-            return m;
+            return null;
         }
-        return this.messageDAO.getMessageById(id);
+        else {
+            return this.messageDAO.getMessageById(id);
+        }
     }
 
     /* Creates message after checking that message_text isn't empty and not above 25 characters,
@@ -51,27 +51,29 @@ public class MessageService {
 
     /* Deletes message (if present) and returns the message that was deleted */
     public Message deleteMessageById(int id){ 
-        Message m = this.messageDAO.getMessageById(id);
-        boolean didDelete = this.messageDAO.deleteMessageById(id);   
-        if (didDelete && !(m == null)){
-            return m;
-        }
-        return null;
+        Message m = new Message();
+        m = this.messageDAO.getMessageById(id);
+        this.messageDAO.deleteMessageById(id);
+        return m;
     }
 
-    /* Updates message (if present) and returns the message that was deleted */
+    /* Returns true if database is updated */
     public Message updateMessageById(int id, Message message){ 
         String new_text = message.getMessage_text();
         if (this.messageDAO.getMessageById(id) == null){
             return null;
         }
-        if (new_text.isEmpty() || new_text.length() <= 255){
+         else if (new_text.isEmpty() || new_text.length() <= 255){
             return null;
         }
-        boolean didUpdate = this.messageDAO.updateMessageById(id, new_text);
-        if (didUpdate){
-            return this.messageDAO.getMessageById(id);
+        else {
+            boolean didUpdate = this.messageDAO.updateMessageById(id, new_text);
+            if (didUpdate){
+                return this.messageDAO.getMessageById(id);
+            }
+            else{
+                return null;
+            }
         }
-        return null;
     }
 }

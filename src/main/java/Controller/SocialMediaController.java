@@ -88,7 +88,12 @@ public class SocialMediaController {
         ObjectMapper om = new ObjectMapper();
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         Message message = ms.getMessageById(message_id);
-        ctx.json(om.writeValueAsString(message));
+        if (message == null){
+            ctx.json("");
+        }
+        else {
+            ctx.json(om.writeValueAsString(message));
+        }
     }
 
     /* Creates a message upon POST request, response contains a client error if message
@@ -113,7 +118,12 @@ public class SocialMediaController {
         ObjectMapper om = new ObjectMapper();
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         Message message = messageService.deleteMessageById(message_id);
-        ctx.json(om.writeValueAsString(message));
+        if (message == null){
+            ctx.json("");
+        }
+        else {
+            ctx.json(om.writeValueAsString(message));
+        }
     }
 
     /* Updates message by message_id upon PATCH req. Response contains client error 
@@ -123,14 +133,13 @@ public class SocialMediaController {
         ObjectMapper om = new ObjectMapper();
         int message_id = Integer.parseInt(ctx.pathParam("message_id"));
         Message message_text = om.readValue(ctx.body(), Message.class);
-        Message updatedMessage = messageService.updateMessageById(message_id, message_text);
-        if (updatedMessage == null){
+        Message new_message = messageService.updateMessageById(message_id, message_text);
+        if (new_message == null){
             ctx.status(400);
         }
         else {
-            ctx.json(om.writeValueAsString(updatedMessage));
+            ctx.json(om.writeValueAsString(new_message));
         }
-
     }
 
 }

@@ -54,22 +54,22 @@ public class MessageDAO {
         return null;
     }
 
-    /* Retreieves message by message id */
+    /* Returns message given by message id */
     public Message getMessageById(int id){
         Connection connection = ConnectionUtil.getConnection();
         try {
-            String sql = "select * from message";
+            String sql = "select * from message where message_id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1,id);
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                if (rs.getInt("message_id") == id){
-                    Message message = new Message(rs.getInt("message_id"), 
-                                                    rs.getInt("posted_by"),
-                                                    rs.getString("message_text"),
-                                                    rs.getLong("time_posted_epoch"));
-                    return message;
-                }
+                Message message = new Message(rs.getInt("message_id"), 
+                                              rs.getInt("posted_by"),
+                                              rs.getString("message_text"),
+                                              rs.getLong("time_posted_epoch"));
+                return message;
             }
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -87,20 +87,22 @@ public class MessageDAO {
             ps.setString(1, new_text);
             ps.setInt(2, id);
             
-            int checkInsert = ps.executeUpdate(); 
+            int check = ps.executeUpdate(); 
 
-            if(checkInsert == 0){
+            if(check == 0){
                 return false;
             }
-            return true;
+            else {
+                return true;
+            }
         }catch(SQLException e){
             System.out.println(e.getMessage());
+            return false;
         }
-        return false; 
     }
 
     /* Deletes message by message id */
-    public boolean deleteMessageById(int id){
+    public void deleteMessageById(int id){
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "delete from message where message_id = ?";
@@ -108,16 +110,11 @@ public class MessageDAO {
 
             ps.setInt(1, id);
 
-            int checkInsert = ps.executeUpdate(); 
-
-            if(checkInsert == 0){
-                return false;
-            }
-            return true;
+            ps.executeUpdate(); 
+            
         }catch(SQLException e){
             System.out.println(e.getMessage());
         }
-        return false; 
     }
 
     /* Retreievs all messages by a certain user (posted_by) */
