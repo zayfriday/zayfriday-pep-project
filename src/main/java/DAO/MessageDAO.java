@@ -78,7 +78,7 @@ public class MessageDAO {
     }
 
     /* Updates message by message id */
-    public boolean updateMessageById(int id, String new_text){
+    public void updateMessageById(int id, String new_text){
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "update message set message_text = ? where message_id = ?";
@@ -87,17 +87,10 @@ public class MessageDAO {
             ps.setString(1, new_text);
             ps.setInt(2, id);
             
-            int check = ps.executeUpdate(); 
-
-            if(check == 0){
-                return false;
-            }
-            else {
-                return true;
-            }
-        }catch(SQLException e){
+            ps.executeUpdate(); 
+        }
+        catch(SQLException e){
             System.out.println(e.getMessage());
-            return false;
         }
     }
 

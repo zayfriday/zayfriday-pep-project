@@ -59,21 +59,15 @@ public class MessageService {
 
     /* Returns true if database is updated */
     public Message updateMessageById(int id, Message message){ 
-        String new_text = message.getMessage_text();
         if (this.messageDAO.getMessageById(id) == null){
             return null;
         }
-         else if (new_text.isEmpty() || new_text.length() <= 255){
+        else if (message.getMessage_text().isEmpty() || message.getMessage_text().length() > 255){
             return null;
         }
         else {
-            boolean didUpdate = this.messageDAO.updateMessageById(id, new_text);
-            if (didUpdate){
-                return this.messageDAO.getMessageById(id);
-            }
-            else{
-                return null;
-            }
+            this.messageDAO.updateMessageById(id, message.getMessage_text()); 
+            return this.messageDAO.getMessageById(id);
         }
     }
 }
